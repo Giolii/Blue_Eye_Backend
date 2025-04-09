@@ -17,7 +17,11 @@ app.use(express.static("public"));
 app.use(passport.initialize());
 
 const corsOptions = {
-  origin: [process.env.VITE_FRONTEND_URL, process.env.VITE_FRONTEND_URL2],
+  origin: [
+    process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL2,
+    "http://localhost:5173",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
