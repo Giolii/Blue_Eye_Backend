@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const cors = require("cors");
 
@@ -9,12 +10,13 @@ const port = process.env.PORT;
 // Routes
 const authRoutes = require("./routes/authRoutes");
 
-require("./config/passport");
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(cookieParser());
 app.use(passport.initialize());
+
+require("./config/passport");
 
 const corsOptions = {
   origin: [

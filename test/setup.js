@@ -2,11 +2,13 @@ const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const prisma = require("../config/prisma");
+const cookieParser = require("cookie-parser");
 
 const createTestApp = () => {
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
   require("../config/passport");
   app.use(passport.initialize());
   return app;
@@ -45,7 +47,6 @@ afterAll(async () => {
 module.exports = {
   prisma,
   createTestApp,
-  generateToken,
   cleanDatabase,
   generateToken,
 };

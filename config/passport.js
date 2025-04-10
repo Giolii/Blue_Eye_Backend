@@ -1,11 +1,19 @@
 const passport = require("passport");
-const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
+const { Strategy: JwtStrategy } = require("passport-jwt");
 const { sanitizeUser } = require("../utils/sanitizeUser");
 
 const prisma = require("./prisma");
 
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies.jwt;
+  }
+  return token;
+};
+
 const options = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: cookieExtractor,
   secretOrKey: process.env.JWT_SECRET,
 };
 

@@ -108,9 +108,15 @@ const authController = {
         expiresIn: "7d",
       });
 
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
       res.json({
         message: "Login successful",
-        token,
         user: sanitizeUser(user),
       });
     } catch (error) {
@@ -169,6 +175,7 @@ const authController = {
           id: req.user.id,
         },
       });
+
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -179,6 +186,10 @@ const authController = {
         .status(500)
         .json({ error: "Error during authentication", error: error.message });
     }
+  },
+  async logout(req, res) {
+    res.clearCookie("jwt");
+    res.json({ message: "Logout successful" });
   },
 };
 

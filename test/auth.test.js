@@ -59,7 +59,6 @@ describe("Auth Controller", () => {
         password: "password123",
       });
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty("token");
     });
     it("should reject invalid credentials", async () => {
       const response = await request(app).post("/auth/login").send({
@@ -71,10 +70,12 @@ describe("Auth Controller", () => {
     });
   });
   describe("GET /auth/me", () => {
-    it("should check user token", async () => {
+    it("should check user authentication from cookie", async () => {
+      const token = generateToken(user1.id);
+
       const response = await request(app)
         .get("/auth/me")
-        .set("Authorization", `Bearer ${generateToken(user1.id)}`);
+        .set("Cookie", [`jwt=${token}`]);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("user");
@@ -82,7 +83,7 @@ describe("Auth Controller", () => {
     it("should return error if token is wrong", async () => {
       const response = await request(app)
         .get("/auth/me")
-        .set("Authorization", `Bearer ${generateToken(user1.id) + "XYZ"}`);
+        .set("Cookie", [`jwt=hjgGHJhgkJgJHjgh`]);
 
       expect(response.status).toBe(401);
     });

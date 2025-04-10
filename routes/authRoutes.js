@@ -8,5 +8,6 @@ router.post("/register", authController.signup);
 router.post("/login", authController.login);
 router.get("/me", authenticateJWT, authController.authenticateMe);
 router.post("/guest", authController.guest);
+router.post("/logout", authController.logout);
 
 module.exports = router;
