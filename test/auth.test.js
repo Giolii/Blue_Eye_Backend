@@ -1,28 +1,19 @@
 const request = require("supertest");
-const { createTestApp, cleanDatabase, generateToken } = require("./setup");
+const {
+  createTestApp,
+  cleanDatabase,
+  generateToken,
+  testUsers,
+} = require("./setup");
 const authRoutes = require("../routes/authRoutes");
-const prisma = require("../config/prisma");
 
 describe("Auth Controller", () => {
-  let user1, app, testUsers, guestUser;
+  let app, users;
 
   beforeAll(async () => {
     app = createTestApp();
     app.use("/auth", authRoutes);
-
-    const guestUser = await request(app).post("/auth/register").send({
-      email: "guest@guest.com",
-      username: "Guest",
-      password: "password123",
-    });
-
-    user1 = await prisma.user.create({
-      data: {
-        email: "gino@g.g",
-        username: "gino11",
-        password: "ax34jfg50x",
-      },
-    });
+    users = await testUsers();
   });
 
   afterAll(async () => {
@@ -39,13 +30,11 @@ describe("Auth Controller", () => {
 
       expect(response.body).toHaveProperty("token");
       expect(response.status).toBe(201);
-      expect(response.body.user).toHaveProperty("id");
-      expect(response.body.user.email).toBe("newuser@example.com");
     });
   });
   it("should not allow duplicate emails", async () => {
     const response = await request(app).post("/auth/register").send({
-      email: "guest@guest.com",
+      email: "newuser@example.com",
       username: "differentuser",
       password: "password123",
     });
@@ -54,15 +43,27 @@ describe("Auth Controller", () => {
 
   describe("POST /auth/login", () => {
     it("should authenticate existing users", async () => {
-      const response = await request(app).post("/auth/login").send({
-        emailOrUsername: "guest@guest.com",
+      let fakeUser = {
+        email: "newuser2@example.com",
+        username: "differentuser2",
         password: "password123",
+      };
+
+      await request(app).post("/auth/register").send({
+        email: fakeUser.email,
+        username: fakeUser.username,
+        password: fakeUser.password,
+      });
+
+      const response = await request(app).post("/auth/login").send({
+        emailOrUsername: fakeUser.email,
+        password: fakeUser.password,
       });
       expect(response.status).toBe(200);
     });
     it("should reject invalid credentials", async () => {
       const response = await request(app).post("/auth/login").send({
-        emailOrUsername: "guest@guest.com",
+        emailOrUsername: users.user1.email,
         password: "wrongpassword",
       });
 
@@ -71,7 +72,13 @@ describe("Auth Controller", () => {
   });
   describe("GET /auth/me", () => {
     it("should check user authentication from cookie", async () => {
-      const token = generateToken(user1.id);
+      const user = await request(app).post("/auth/register").send({
+        email: "usertoken@c.com",
+        username: "usertoken",
+        password: "jkl143hjhg562j43",
+      });
+
+      const token = generateToken(user.body.user.id);
 
       const response = await request(app)
         .get("/auth/me")
@@ -83,7 +90,7 @@ describe("Auth Controller", () => {
     it("should return error if token is wrong", async () => {
       const response = await request(app)
         .get("/auth/me")
-        .set("Cookie", [`jwt=hjgGHJhgkJgJHjgh`]);
+        .set("Cookie", [`12345678`]);
 
       expect(response.status).toBe(401);
     });

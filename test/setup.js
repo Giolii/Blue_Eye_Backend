@@ -22,7 +22,44 @@ const cleanDatabase = async () => {
   // await prisma.message.deleteMany({});
   // await prisma.userConversation.deleteMany({});
   // await prisma.conversation.deleteMany({});
+  await prisma.post.deleteMany({});
   await prisma.user.deleteMany({});
+};
+
+const testUsers = async () => {
+  const user1 = await prisma.user.create({
+    data: {
+      email: "test1@example.com",
+      username: "testuser1",
+      password: "password123",
+    },
+  });
+  const user2 = await prisma.user.create({
+    data: {
+      email: "test2@example.com",
+      username: "testuser2",
+      password: "password123",
+    },
+  });
+  const user3 = await prisma.user.create({
+    data: {
+      email: "test3@example.com",
+      username: "testuser3",
+      password: "password123",
+    },
+  });
+  const post1 = await prisma.post.create({
+    data: {
+      content: "Content of post 1",
+      userId: user1.id,
+    },
+  });
+  return {
+    user1,
+    user2,
+    user3,
+    post1,
+  };
 };
 
 beforeAll(async () => {
@@ -49,4 +86,5 @@ module.exports = {
   createTestApp,
   cleanDatabase,
   generateToken,
+  testUsers,
 };
