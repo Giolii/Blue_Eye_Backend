@@ -1,0 +1,50 @@
+const randomAvatar = () => {
+  const avatars = [
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0000_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0001_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0002_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0003_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0004_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0005_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0006_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0007_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0008_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0009_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0010_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0011_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0012_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0013_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0014_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0015_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0016_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0017_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0018_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0019_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0020_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0021_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0022_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0023_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0024_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0025_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0026_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0027_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0028_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0029_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0030_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0031_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0032_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0033_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0034_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0035_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0036_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0037_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0038_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0039_f00_s0.png",
+    "https://resource.pokemon-home.com/battledata/img/pokei128/icon0040_f00_s0.png",
+  ];
+
+  const randomIndex = Math.floor(Math.random() * avatars.length);
+  return avatars[randomIndex];
+};
+
+module.exports = randomAvatar;

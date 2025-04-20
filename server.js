@@ -10,6 +10,7 @@ const port = process.env.PORT;
 // Routes
 const authRoutes = require("./routes/authRoutes");
 const postsRoutes = require("./routes/postsRoutes");
+const usersRoutes = require("./routes/usersRoutes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 // Use Routes
 app.use("/auth", authRoutes);
 app.use("/posts", postsRoutes);
+app.use("/users", usersRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

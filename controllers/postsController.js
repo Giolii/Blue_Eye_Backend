@@ -102,6 +102,11 @@ const postsController = {
         data: {
           content,
         },
+        include: {
+          user: {
+            select: userFields,
+          },
+        },
       });
 
       return res.status(200).json({ post });
@@ -145,6 +150,11 @@ const postsController = {
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: userFields,
+    });
+
     try {
       const posts = await prisma.post.findMany({
         where: { userId },
@@ -167,6 +177,7 @@ const postsController = {
       const hasMore = skip + posts.length < totalPosts;
 
       return res.status(200).json({
+        user,
         posts,
         hasMore,
         nextPage: hasMore ? parseInt(page) + 1 : null,

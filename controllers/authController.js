@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const prisma = require("../config/prisma");
 const { sanitizeUser } = require("../utils/sanitizeUser");
+const randomAvatar = require("../utils/randomAvatar");
 
 const authController = {
   // Sign Up
@@ -60,6 +61,7 @@ const authController = {
           email: email.toLowerCase(),
           username,
           password: hashedPassword,
+          avatar: randomAvatar(),
         },
       });
 
@@ -142,7 +144,7 @@ const authController = {
           data: {
             name: "Guest",
             username: "Guest",
-            // avatar: randomAvatar(),
+            avatar: randomAvatar(),
             email: "guest@guest.com",
             password: "xxxxxx",
           },
@@ -153,9 +155,14 @@ const authController = {
         expiresIn: "7d",
       });
 
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
       res.json({
         message: "Login successful",
-        token,
         user: sanitizeUser(user),
       });
     } catch (error) {
