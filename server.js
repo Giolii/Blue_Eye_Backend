@@ -11,6 +11,7 @@ const port = process.env.PORT;
 const authRoutes = require("./routes/authRoutes");
 const postsRoutes = require("./routes/postsRoutes");
 const usersRoutes = require("./routes/usersRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/posts", postsRoutes);
 app.use("/users", usersRoutes);
+app.use("/upload", uploadRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

@@ -5,8 +5,9 @@ const postsController = {
   async createPost(req, res) {
     const content = req.body.content.trim();
     const userId = req.user.id;
+    const image = req.body.imageUrl;
 
-    if (!content) {
+    if (!content && !image) {
       return res
         .status(400)
         .json({ message: "You need to provide some content" });
@@ -16,6 +17,7 @@ const postsController = {
         data: {
           content,
           userId,
+          imageUrl: image || null,
         },
         include: {
           user: {
