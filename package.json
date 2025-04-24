@@ -1,10 +1,10 @@
 {
   "name": "last",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "node server.js",
+    "start": "node app.js",
     "build": "npx prisma generate"
   },
   "author": "",
@@ -18,11 +18,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "path": "^0.12.7",
+    "socket.io": "^4.8.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
