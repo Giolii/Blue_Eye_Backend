@@ -17,6 +17,7 @@ model User {
   avatar String?
   createdAt DateTime @default(now())
   posts Post[]
+  likes Like[]
   }
 
   model Post{
@@ -26,6 +27,22 @@ model User {
     imageUrl String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    originalPostId String?
+    originalPost   Post?    @relation("SharedPosts", fields: [originalPostId], references: [id])
+    sharedPosts    Post[]   @relation("SharedPosts")
  
     user User @relation(fields:[userId],references: [id])
+    likes Like[]
+  }
+
+  model Like {
+    id String @id @default(cuid())
+    userId String
+    postId String
+    createdAt DateTime @default(now())
+
+    user User @relation(fields:[userId], references: [id])
+    post Post @relation(fields:[postId], references: [id])
+    @@unique([userId,postId])
   }

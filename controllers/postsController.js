@@ -72,6 +72,23 @@ const postsController = {
           user: {
             select: userFields,
           },
+          originalPost: {
+            include: {
+              user: {
+                select: userFields,
+              },
+            },
+          },
+          likes: {
+            select: {
+              userId: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true, // Get total count of likes
+            },
+          },
         },
       });
 
@@ -107,6 +124,23 @@ const postsController = {
         include: {
           user: {
             select: userFields,
+          },
+          originalPost: {
+            include: {
+              user: {
+                select: userFields,
+              },
+            },
+          },
+          likes: {
+            select: {
+              userId: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true, // Get total count of likes
+            },
           },
         },
       });
@@ -169,6 +203,23 @@ const postsController = {
           user: {
             select: userFields,
           },
+          originalPost: {
+            include: {
+              user: {
+                select: userFields,
+              },
+            },
+          },
+          likes: {
+            select: {
+              userId: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true, // Get total count of likes
+            },
+          },
         },
       });
 
@@ -190,6 +241,91 @@ const postsController = {
       }
       console.error("Error fetching posts by user:", error);
       return res.status(500).json({ message: "Failed to fetch posts by user" });
+    }
+  },
+  async sharePost(req, res) {
+    const { content } = req.body;
+    const postId = req.params.id;
+    const userId = req.user.id;
+
+    if (!postId) {
+      return res.status(401).json({ message: "You need to provide a post Id" });
+    }
+
+    try {
+      const postToShare = await prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+      });
+
+      if (!postToShare) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      const post = await prisma.post.create({
+        data: {
+          content: content.trim() || "",
+          userId: userId,
+          originalPostId: postId,
+        },
+        include: {
+          user: {
+            select: userFields,
+          },
+          originalPost: {
+            include: {
+              user: {
+                select: userFields,
+              },
+            },
+          },
+        },
+      });
+
+      return res.status(201).json({ post });
+    } catch (error) {
+      console.error("Error sharing post:", error);
+      return res.status(500).json({ message: "Failed to share post" });
+    }
+  },
+
+  async likePost(req, res) {
+    const postId = req.params.id;
+    const userId = req.user.id;
+
+    try {
+      const likeExists = await prisma.like.findUnique({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+      });
+
+      if (likeExists) {
+        const dislikePost = await prisma.like.delete({
+          where: {
+            userId_postId: {
+              userId,
+              postId,
+            },
+          },
+        });
+        return res.status(200).json({ message: "Post unliked successfully" });
+      }
+
+      const response = await prisma.like.create({
+        data: {
+          userId,
+          postId,
+        },
+      });
+      return res.status(201).json({ message: "Post liked successfully" });
+    } catch (error) {
+      console.error("Error liking post:", error);
+      return res.status(500).json({ message: "Failed to like post" });
     }
   },
 };
