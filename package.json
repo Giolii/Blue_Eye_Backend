@@ -1,10 +1,10 @@
 {
   "name": "last",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "node app.js",
+    "start": "node server.js",
     "build": "npx prisma generate"
   },
   "author": "",

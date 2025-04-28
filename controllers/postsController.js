@@ -294,6 +294,9 @@ const postsController = {
     const postId = req.params.id;
     const userId = req.user.id;
 
+    const io = req.app.get("io");
+    const connectedUsers = req.app.get("connectedUsers");
+
     try {
       const likeExists = await prisma.like.findUnique({
         where: {
@@ -316,13 +319,50 @@ const postsController = {
         return res.status(200).json({ message: "Post unliked successfully" });
       }
 
-      const response = await prisma.like.create({
+      const like = await prisma.like.create({
         data: {
           userId,
           postId,
         },
+        include: {
+          user: {
+            select: userFields,
+          },
+          post: {},
+        },
       });
-      return res.status(201).json({ message: "Post liked successfully" });
+
+      if (like.post.userId !== userId) {
+        const notificationData = {
+          userId: like.post.userId,
+          type: "POST_LIKED",
+          message: `${like.user.username} liked your post`,
+          postId: like.postId,
+          data: {
+            likeId: like.id,
+            likedBy: {
+              id: like.user.id,
+              username: like.user.username,
+              avatar: like.user.avatar,
+            },
+          },
+          createdAt: new Date(),
+        };
+
+        const notification = await prisma.notification.create({
+          data: notificationData,
+        });
+
+        const ownerSocketId = connectedUsers.get(like.post.userId);
+        if (ownerSocketId) {
+          io.to(ownerSocketId).emit("notification", {
+            ...notification,
+            createdAt: notification.createdAt,
+          });
+        }
+      }
+
+      return res.status(201).json({ message: "Post liked successfully", like });
     } catch (error) {
       console.error("Error liking post:", error);
       return res.status(500).json({ message: "Failed to like post" });
