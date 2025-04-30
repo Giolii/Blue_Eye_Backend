@@ -84,9 +84,13 @@ const postsController = {
               userId: true,
             },
           },
+          comments: {
+            include: { user: { select: userFields } },
+            orderBy: { createdAt: "asc" },
+          },
           _count: {
             select: {
-              likes: true, // Get total count of likes
+              likes: true,
             },
           },
         },
@@ -199,6 +203,9 @@ const postsController = {
         orderBy: {
           createdAt: "desc",
         },
+        orderBy: {
+          createdAt: "desc",
+        },
         include: {
           user: {
             select: userFields,
@@ -215,9 +222,13 @@ const postsController = {
               userId: true,
             },
           },
+          comments: {
+            include: { user: { select: userFields } },
+            orderBy: { createdAt: "asc" },
+          },
           _count: {
             select: {
-              likes: true, // Get total count of likes
+              likes: true,
             },
           },
         },
@@ -339,8 +350,10 @@ const postsController = {
           message: `${like.user.username} liked your post`,
           postId: like.postId,
           data: {
+            content: like.post.content,
+            imageUrl: like.post.imageUrl,
             likeId: like.id,
-            likedBy: {
+            sentBy: {
               id: like.user.id,
               username: like.user.username,
               avatar: like.user.avatar,
