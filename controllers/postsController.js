@@ -172,6 +172,27 @@ const postsController = {
           user: {
             select: userFields,
           },
+          originalPost: {
+            include: {
+              user: {
+                select: userFields,
+              },
+            },
+          },
+          likes: {
+            select: {
+              userId: true,
+            },
+          },
+          comments: {
+            include: { user: { select: userFields } },
+            orderBy: { createdAt: "asc" },
+          },
+          _count: {
+            select: {
+              likes: true,
+            },
+          },
         },
       });
 

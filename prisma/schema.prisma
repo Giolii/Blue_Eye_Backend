@@ -22,6 +22,10 @@ model User {
   notifications Notification[]
   comments Comment[]
 
+    following     Follow[] @relation("UserFollowing")
+  followers     Follow[] @relation("UserFollowers")
+
+
   }
 
   model Post{
@@ -78,5 +82,20 @@ model Comment{
 
   user      User     @relation(fields: [userId], references: [id])
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+}
+
+model Follow{
+    id String @id @default(uuid())
+      followerId String
+      followingId String
+      createdAt DateTime @default(now())
+
+    follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+    following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+
+
+  @@unique([followerId, followingId])
 
 }
