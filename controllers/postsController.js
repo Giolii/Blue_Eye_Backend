@@ -211,19 +211,16 @@ const postsController = {
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: userFields,
-    });
-
     try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: userFields,
+      });
+
       const posts = await prisma.post.findMany({
         where: { userId },
         skip: parseInt(skip),
         take: parseInt(limit),
-        orderBy: {
-          createdAt: "desc",
-        },
         orderBy: {
           createdAt: "desc",
         },

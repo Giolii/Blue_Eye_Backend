@@ -94,8 +94,5 @@ model Follow{
     follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
     following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
 
-
-
   @@unique([followerId, followingId])
-
 }
