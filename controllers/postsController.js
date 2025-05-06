@@ -263,6 +263,7 @@ const postsController = {
         posts,
         hasMore,
         nextPage: hasMore ? parseInt(page) + 1 : null,
+        totalPosts,
       });
     } catch (error) {
       if (error.code === "P2025") {

@@ -51,6 +51,27 @@ const usersController = {
       return res.status(500).json({ message: "Failed  updating user" });
     }
   },
+
+  async updateName(req, res) {
+    const userId = req.params.id;
+    const { newName } = req.body;
+
+    try {
+      const user = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          name: newName,
+        },
+      });
+      return res.status(200).json(sanitizeUser(user));
+    } catch (error) {
+      console.error("Error updating user:", error);
+      return res.status(500).json({ message: "Failed  updating user" });
+    }
+  },
+
   async followUser(req, res) {
     const userIdToFollow = req.params.userId;
 
