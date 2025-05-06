@@ -27,6 +27,7 @@ app.use(cors(corsConfig.express));
 // Make io and connectedUsers available to routes
 app.set("io", io);
 app.set("connectedUsers", connectedUsers);
+
 require("./config/passport");
 
 // Socket.IO authentication
@@ -35,6 +36,9 @@ io.use(socketAuthMiddleware);
 io.on("connection", require("./config/socketHandler")(connectedUsers));
 
 // Routes
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Server is running" });
+});
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/posts", require("./routes/postsRoutes"));
 app.use("/users", require("./routes/usersRoutes"));
