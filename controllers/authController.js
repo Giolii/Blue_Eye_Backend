@@ -92,7 +92,10 @@ const authController = {
     try {
       const user = await prisma.user.findFirst({
         where: {
-          OR: [{ email: emailOrUsername }, { username: emailOrUsername }],
+          OR: [
+            { email: { equals: emailOrUsername, mode: "insensitive" } },
+            { username: { equals: emailOrUsername, mode: "insensitive" } },
+          ],
         },
       });
 

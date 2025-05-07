@@ -95,9 +95,6 @@ const usersController = {
           },
         },
       });
-      console.log(response);
-
-      // ok
 
       const notificationData = {
         userId: response.followingId,
@@ -124,8 +121,6 @@ const usersController = {
           createdAt: notification.createdAt,
         });
       }
-
-      // ok
 
       res.status(201).json(response);
     } catch (error) {
