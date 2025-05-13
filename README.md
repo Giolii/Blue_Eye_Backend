@@ -9,8 +9,8 @@ A modern social networking application built with Node.js, Express, and React wi
 </p>
 
 **Repositories:**
-- [Frontend (This repo)](https://github.com/Giolii/Blue_Eye)
-- [Backend](https://github.com/Giolii/Blue_Eye_Backend) 
+- [Frontend](https://github.com/Giolii/Blue_Eye)
+- [Backend (This repo)](https://github.com/Giolii/Blue_Eye_Backend) 
 
 ## 📋 Overview
 
